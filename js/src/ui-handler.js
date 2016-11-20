@@ -6,7 +6,7 @@ function getExampleImage(){
             resolve(this);
         };
         img.onerror = reject;
-        img.src = 'img/example.png';
+        img.src = 'img/pigeon.jpg';
     });
 
 }
