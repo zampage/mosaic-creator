@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/zampage/mosaic-creator#readme",
   "dependencies": {
+    "jquery": "^3.1.1",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
