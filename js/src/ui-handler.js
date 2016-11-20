@@ -30,3 +30,19 @@ function setupCanvas(image){
     });
 
 }
+
+function setupCopyCanvas($canvas){
+
+    return new Promise(function(resolve, reject){
+
+        var $stage = $('.stage');
+        var $copyCanvas = $canvas.clone();
+        var copyCtx = $copyCanvas.get(0).getContext('2d');
+        copyCtx.clearRect(0, 0, $copyCanvas.get(0).width, $copyCanvas.get(0).height);
+        $copyCanvas.appendTo($stage);
+
+        resolve([$copyCanvas, copyCtx]);
+
+    });
+
+}
