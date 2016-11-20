@@ -53,7 +53,8 @@ gulp.task('sass', function(){
             browsers: ['last 2 versions', 'ie >= 9'],
             cascade: false
         }))
-        .pipe(gulp.dest(dir.sass.out + name.sass));
+        .pipe(concat(name.sass))
+        .pipe(gulp.dest(dir.sass.out));
     success('SASS compiled');
 });
 
