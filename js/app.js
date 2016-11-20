@@ -1,7 +1,7 @@
 var $canvas, ctx, originalImage, pixelData;
 
-var mosaicWidth = 50;
-var mosaicHeight = 50;
+var mosaicWidth = 10;
+var mosaicHeight = 10;
 
 getExampleImage()
     .then(setupCanvas)
@@ -30,7 +30,6 @@ function createMosaic(data){
 
     _.each(data, function(d, idx){
 
-        console.log(copyCtx, d);
         copyCtx.fillStyle = getColorString(d.rgb);
         copyCtx.fillRect(d.x, d.y, mosaicWidth, mosaicHeight);
 
@@ -79,12 +78,12 @@ function analyzeImage(){
         }
 
         /*
-        $colorchecker = $('.colorchecker');
-        $empty = $('<p></p>');
-        _.each(pixelData, function(element, idx){
-            $empty.clone().text(idx).css('backgroundColor', getColorString(element.rgb)).appendTo($colorchecker);
-        });
-        */
+         $colorchecker = $('.colorchecker');
+         $empty = $('<p></p>');
+         _.each(pixelData, function(element, idx){
+         $empty.clone().text(idx).css('backgroundColor', getColorString(element.rgb)).appendTo($colorchecker);
+         });
+         */
 
         resolve(pixelData);
 
@@ -98,7 +97,7 @@ function getExampleImage(){
             resolve(this);
         };
         img.onerror = reject;
-        img.src = 'img/example.png';
+        img.src = 'img/pigeon.jpg';
     });
 
 }
