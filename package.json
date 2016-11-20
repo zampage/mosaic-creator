@@ -1,0 +1,31 @@
+{
+  "name": "mosaic-creator",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/zampage/mosaic-creator.git"
+  },
+  "author": "Markus Chiarot",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zampage/mosaic-creator/issues"
+  },
+  "homepage": "https://github.com/zampage/mosaic-creator#readme",
+  "dependencies": {
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "browserify": "^13.1.1",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-inject": "^4.1.0",
+    "gulp-sass": "^2.3.2",
+    "gulp-util": "^3.0.7",
+    "vinyl-transform": "^1.0.0"
+  }
+}
