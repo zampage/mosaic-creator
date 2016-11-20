@@ -1,3 +1,4 @@
+//dependencies
 var gulp = require('gulp'),
     gutil = require('gulp-util'),
     sass = require('gulp-sass'),
@@ -6,6 +7,7 @@ var gulp = require('gulp'),
     source = require('vinyl-source-stream'),
     concat = require('gulp-concat');
 
+//directories
 var dir = {
     sass:{
         in: './style/sass/**/*.scss',
@@ -18,12 +20,14 @@ var dir = {
     }
 };
 
+//filenames
 var name = {
     sass: 'style.css',
     js: 'app.js',
     browserify: 'bundle.js'
 };
 
+//messaging
 var message = function(msg){
     gutil.log(msg);
 };
@@ -37,6 +41,7 @@ var success = function(msg){
     message(gutil.colors.green('[OK]: ' + msg.toString()));
 };
 
+//compile sass
 gulp.task('sass', function(){
     info('start compiling SASS');
     gulp.src(dir.sass.in)
@@ -52,6 +57,7 @@ gulp.task('sass', function(){
     success('SASS compiled');
 });
 
+//compile dependencies
 gulp.task('browserify', function(){
     info('start compiling JS dependencies');
     browserify(dir.js.require)
@@ -62,6 +68,7 @@ gulp.task('browserify', function(){
     success('JS dependencies compiled');
 });
 
+//compile custom JS
 gulp.task('customJS', function(){
     info('start compiling custom JS');
     gulp.src(dir.js.in)
@@ -70,12 +77,18 @@ gulp.task('customJS', function(){
     success('custom JS compiled');
 });
 
+//compile scripts
 gulp.task('scripts', ['browserify', 'customJS']);
 
+//build sass and JS
+gulp.task('build', ['sass', 'scripts']);
+
+//watch files
 gulp.task('watch', function(){
     info('start watching files');
     gulp.watch(dir.sass.in, ['sass']);
     gulp.watch([dir.js.in, dir.js.require], ['scripts']);
 });
 
-gulp.task('default', ['sass', 'scripts', 'watch']);
+//build and watch
+gulp.task('default', ['build', 'watch']);
