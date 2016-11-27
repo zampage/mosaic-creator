@@ -7,7 +7,8 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     rename = require('gulp-rename'),
     sourcemaps = require('gulp-sourcemaps'),
-    header = require('gulp-header');
+    header = require('gulp-header'),
+    babel = require('gulp-babel');
 
 //directories
 var dir = {
@@ -83,6 +84,8 @@ gulp.task('scripts', function(){
         .pipe(sourcemaps.init())
         .pipe(concat(name.js + '.js'))
         .pipe(header(license, {pkg:pkg}))
+        .pipe(babel({presets: ['es2015']}))
+        .on('error', error)
         .pipe(gulp.dest(dir.js.out))
         .pipe(uglify({ preserveComments: 'license' }))
         .on('error', error)
