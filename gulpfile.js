@@ -18,6 +18,13 @@ var dir = {
     js:{
         in: './js/**/*.js',
         out: './dist/'
+    },
+    lib:{
+        in: [
+            'node_modules/jquery/dist/jquery.min.js',
+            'node_modules/underscore/underscore-min.js'
+        ],
+        out: './example/lib/'
     }
 };
 
@@ -54,7 +61,7 @@ var success = function(msg){
 
 //compile sass
 gulp.task('sass', function(){
-    info('start compiling SASS');
+    info('compiling SASS ...');
     gulp.src(dir.sass.in)
         .pipe(
             sass({outputStyle: 'compressed'})
@@ -71,7 +78,7 @@ gulp.task('sass', function(){
 
 //compile scripts
 gulp.task('scripts', function(){
-    info('start compiling scripts');
+    info('compiling scripts ...');
     gulp.src(dir.js.in)
         .pipe(sourcemaps.init())
         .pipe(concat(name.js + '.js'))
@@ -85,8 +92,15 @@ gulp.task('scripts', function(){
     success('scripts compiled');
 });
 
+gulp.task('lib', function(){
+    info('creating lib from node_modules ...');
+    gulp.src(dir.lib.in)
+        .pipe(gulp.dest(dir.lib.out));
+    success('lib created!');
+});
+
 //build sass and JS
-gulp.task('build', ['sass', 'scripts']);
+gulp.task('build', ['scripts', 'lib', 'sass']);
 
 //watch files
 gulp.task('watch', function(){
