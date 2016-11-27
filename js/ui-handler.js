@@ -1,7 +1,7 @@
 function getExampleImage(){
 
     return new Promise(function(resolve, reject){
-        var img = new Image();
+        let img = new Image();
         img.onload = function(){
             resolve(this);
         };
@@ -23,7 +23,7 @@ function setupCanvas(image){
         $canvas.appendTo($stage);
 
         //add image
-        var ctx = $canvas.get(0).getContext('2d');
+        let ctx = $canvas.get(0).getContext('2d');
         ctx.drawImage(image, 0, 0, image.width, image.height);
 
         resolve([$canvas, ctx, image]);
@@ -35,9 +35,9 @@ function setupCopyCanvas($canvas){
 
     return new Promise(function(resolve, reject){
 
-        var $stage = $('.stage');
-        var $copyCanvas = $canvas.clone();
-        var copyCtx = $copyCanvas.get(0).getContext('2d');
+        let $stage = $('.stage');
+        let $copyCanvas = $canvas.clone();
+        let copyCtx = $copyCanvas.get(0).getContext('2d');
         copyCtx.clearRect(0, 0, $copyCanvas.get(0).width, $copyCanvas.get(0).height);
         $copyCanvas.appendTo($stage);
 

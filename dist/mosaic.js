@@ -1,74 +1,66 @@
+'use strict';
+
 /**
  * @author Markus Chiarot
  * @website https://github.com/zampage/mosaic-creator#readme 
  * @version 0.0.1
  * @license MIT
  */
-var $canvas, ctx, originalImage, pixelData;
+var $canvas, ctx, $copyCanvas, copyCtx, originalImage, pixelData;
 
 var mosaicWidth = 10;
 var mosaicHeight = 10;
 
-getExampleImage()
-    .then(setupCanvas)
-    .then(function(data){
-        $canvas = data[0];
-        ctx = data[1];
-        originalImage = data[2];
-    })
-    .then(analyzeImage)
-    .then(function(pd){
-        pixelData = pd;
-        return $canvas;
-    })
-    .then(setupCopyCanvas)
-    .then(function(data){
-        $copyCanvas = data[0];
-        copyCtx = data[1];
-        return pixelData;
-    })
-    .then(createMosaic)
-    .catch(function(error){
-        console.log(error);
-    });
+getExampleImage().then(setupCanvas).then(function (data) {
+    $canvas = data[0];
+    ctx = data[1];
+    originalImage = data[2];
+}).then(analyzeImage).then(function (pd) {
+    pixelData = pd;
+    return $canvas;
+}).then(setupCopyCanvas).then(function (data) {
+    $copyCanvas = data[0];
+    copyCtx = data[1];
+    return pixelData;
+}).then(createMosaic).catch(function (error) {
+    console.log(error);
+});
 
-function createMosaic(data){
+function createMosaic(data) {
 
-    _.each(data, function(d, idx){
+    _.each(data, function (d, idx) {
 
         copyCtx.fillStyle = getColorString(d.rgb);
         copyCtx.fillRect(d.x, d.y, mosaicWidth, mosaicHeight);
-
     });
-
 }
 
-function analyzeImage(){
+function analyzeImage() {
 
-    return new Promise(function(resolve, reject){
+    return new Promise(function (resolve, reject) {
 
         var canvasWidth = $canvas.get(0).width;
         var canvasHeight = $canvas.get(0).height;
 
         var pixelData = [];
 
-        for(var x = 0; x < canvasWidth; x += mosaicWidth){
+        for (var x = 0; x < canvasWidth; x += mosaicWidth) {
 
-            for(var y = 0; y < canvasHeight; y += mosaicHeight){
+            for (var y = 0; y < canvasHeight; y += mosaicHeight) {
 
                 var data = ctx.getImageData(x, y, mosaicWidth, mosaicHeight).data;
 
-                var colors = _.groupBy(data, function(ele, idx){
-                    return Math.floor(idx/4);
+                var colors = _.groupBy(data, function (ele, idx) {
+                    return Math.floor(idx / 4);
                 });
 
                 var averageColor = {
                     x: x,
                     y: y,
-                    rgb: {r: 0, g: 0, b: 0}
+                    rgb: { r: 0, g: 0, b: 0 }
                 };
                 colors = _.toArray(colors);
-                _.each(colors, function(color, idx){
+                _.each(colors, function (color, idx) {
                     averageColor.rgb.r += color[0];
                     averageColor.rgb.g += color[1];
                     averageColor.rgb.b += color[2];
@@ -78,9 +70,7 @@ function analyzeImage(){
                 averageColor.rgb.b = Math.floor(averageColor.rgb.b / colors.length);
 
                 pixelData.push(averageColor);
-
             }
-
         }
 
         /*
@@ -92,25 +82,23 @@ function analyzeImage(){
          */
 
         resolve(pixelData);
-
     });
 }
-function getExampleImage(){
+function getExampleImage() {
 
-    return new Promise(function(resolve, reject){
+    return new Promise(function (resolve, reject) {
         var img = new Image();
-        img.onload = function(){
+        img.onload = function () {
             resolve(this);
         };
         img.onerror = reject;
         img.src = 'img/pigeon.jpg';
     });
-
 }
 
-function setupCanvas(image){
+function setupCanvas(image) {
 
-    return new Promise(function(resolve, reject){
+    return new Promise(function (resolve, reject) {
         var $stage = $('.stage');
         var $canvas = $('<canvas></canvas>');
 
@@ -125,12 +113,11 @@ function setupCanvas(image){
 
         resolve([$canvas, ctx, image]);
     });
-
 }
 
-function setupCopyCanvas($canvas){
+function setupCopyCanvas($canvas) {
 
-    return new Promise(function(resolve, reject){
+    return new Promise(function (resolve, reject) {
 
         var $stage = $('.stage');
         var $copyCanvas = $canvas.clone();
@@ -139,10 +126,8 @@ function setupCopyCanvas($canvas){
         $copyCanvas.appendTo($stage);
 
         resolve([$copyCanvas, copyCtx]);
-
     });
-
 }
-function getColorString(color){
-    return 'rgb('+ color.r + ', ' + color.g + ', ' + color.b + ')';
+function getColorString(color) {
+    return 'rgb(' + color.r + ', ' + color.g + ', ' + color.b + ')';
 }

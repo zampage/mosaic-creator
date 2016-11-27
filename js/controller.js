@@ -1,4 +1,4 @@
-var $canvas, ctx, originalImage, pixelData;
+var $canvas, ctx, $copyCanvas, copyCtx, originalImage, pixelData;
 
 var mosaicWidth = 10;
 var mosaicHeight = 10;
