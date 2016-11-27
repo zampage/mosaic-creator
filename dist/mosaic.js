@@ -1,3 +1,9 @@
+/**
+ * @author Markus Chiarot
+ * @website https://github.com/zampage/mosaic-creator#readme 
+ * @version 0.0.1
+ * @license MIT
+ */
 var $canvas, ctx, originalImage, pixelData;
 
 var mosaicWidth = 10;

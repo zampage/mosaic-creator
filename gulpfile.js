@@ -3,29 +3,40 @@ var gulp = require('gulp'),
     gutil = require('gulp-util'),
     sass = require('gulp-sass'),
     autoprefixer = require('gulp-autoprefixer'),
-    browserify = require('browserify'),
-    source = require('vinyl-source-stream'),
-    concat = require('gulp-concat');
+    uglify = require('gulp-uglify'),
+    concat = require('gulp-concat'),
+    rename = require('gulp-rename'),
+    sourcemaps = require('gulp-sourcemaps'),
+    header = require('gulp-header');
 
 //directories
 var dir = {
     sass:{
-        in: './style/sass/**/*.scss',
-        out: './style/'
+        in: './example/style/sass/**/*.scss',
+        out: './example/style/'
     },
     js:{
-        in: './js/src/**/*.js',
-        out: './js/',
-        require: './js/require.js'
+        in: './js/**/*.js',
+        out: './dist/'
     }
 };
 
 //filenames
 var name = {
     sass: 'style.css',
-    js: 'app.js',
-    browserify: 'bundle.js'
+    js: 'mosaic',
+    suffix: 'min'
 };
+
+//license
+var pkg = require('./package.json');
+var license = ['/**',
+    ' * @author Markus Chiarot',
+    ' * @website <%= pkg.homepage %> ',
+    ' * @version <%= pkg.version %>',
+    ' * @license <%= pkg.license %>',
+    ' */',
+    ''].join('\n');
 
 //messaging
 var message = function(msg){
@@ -58,28 +69,21 @@ gulp.task('sass', function(){
     success('SASS compiled');
 });
 
-//compile dependencies
-gulp.task('browserify', function(){
-    info('start compiling JS dependencies');
-    browserify(dir.js.require)
-        .bundle()
-        .on('error', error)
-        .pipe(source(name.browserify))
-        .pipe(gulp.dest(dir.js.out));
-    success('JS dependencies compiled');
-});
-
-//compile custom JS
-gulp.task('customJS', function(){
-    info('start compiling custom JS');
-    gulp.src(dir.js.in)
-        .pipe(concat(name.js))
-        .pipe(gulp.dest(dir.js.out));
-    success('custom JS compiled');
-});
-
 //compile scripts
-gulp.task('scripts', ['browserify', 'customJS']);
+gulp.task('scripts', function(){
+    info('start compiling scripts');
+    gulp.src(dir.js.in)
+        .pipe(sourcemaps.init())
+        .pipe(concat(name.js + '.js'))
+        .pipe(header(license, {pkg:pkg}))
+        .pipe(gulp.dest(dir.js.out))
+        .pipe(uglify({ preserveComments: 'license' }))
+        .on('error', error)
+        .pipe(rename({extname: '.' + name.suffix + '.js'}))
+        .pipe(sourcemaps.write('maps'))
+        .pipe(gulp.dest(dir.js.out));
+    success('scripts compiled');
+});
 
 //build sass and JS
 gulp.task('build', ['sass', 'scripts']);
@@ -88,7 +92,7 @@ gulp.task('build', ['sass', 'scripts']);
 gulp.task('watch', function(){
     info('start watching files');
     gulp.watch(dir.sass.in, ['sass']);
-    gulp.watch([dir.js.in, dir.js.require], ['scripts']);
+    gulp.watch(dir.js.in, ['scripts']);
 });
 
 //build and watch
